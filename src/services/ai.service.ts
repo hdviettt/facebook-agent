@@ -28,10 +28,16 @@ BEHAVIOR RULES:
 10. If the customer sends a greeting, respond warmly and ask how you can help.`;
 
 class AIService {
-  private anthropic: Anthropic;
+  private _anthropic: Anthropic | null = null;
 
-  constructor() {
-    this.anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  private get anthropic(): Anthropic {
+    if (!this._anthropic) {
+      if (!env.ANTHROPIC_API_KEY) {
+        throw new Error("ANTHROPIC_API_KEY is not configured");
+      }
+      this._anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+    }
+    return this._anthropic;
   }
 
   /**

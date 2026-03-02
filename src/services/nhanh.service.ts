@@ -14,15 +14,13 @@ import type {
 const BASE_URL = "https://pos.open.nhanh.vn";
 
 class NhanhService {
-  private appId: string;
-  private businessId: string;
-  private accessToken: string;
   private rateLimiter: RateLimiter;
 
+  private get appId() { return env.NHANH_APP_ID; }
+  private get businessId() { return env.NHANH_BUSINESS_ID; }
+  private get accessToken() { return env.NHANH_ACCESS_TOKEN; }
+
   constructor() {
-    this.appId = env.NHANH_APP_ID;
-    this.businessId = env.NHANH_BUSINESS_ID;
-    this.accessToken = env.NHANH_ACCESS_TOKEN;
     this.rateLimiter = new RateLimiter(150, 30_000);
   }
 

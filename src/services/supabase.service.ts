@@ -8,10 +8,16 @@ import type {
 } from "../types/conversation.types.js";
 
 class SupabaseService {
-  private client: SupabaseClient;
+  private _client: SupabaseClient | null = null;
 
-  constructor() {
-    this.client = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
+  private get client(): SupabaseClient {
+    if (!this._client) {
+      if (!env.SUPABASE_SERVICE_KEY) {
+        throw new Error("SUPABASE_SERVICE_KEY is not configured");
+      }
+      this._client = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
+    }
+    return this._client;
   }
 
   // --- Products ---
