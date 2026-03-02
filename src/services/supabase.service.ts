@@ -32,6 +32,20 @@ class SupabaseService {
     return data ?? [];
   }
 
+  async getAllProducts(): Promise<Product[]> {
+    const { data, error } = await this.client
+      .from("products")
+      .select("*")
+      .eq("status", "active");
+
+    if (error) {
+      logger.error({ error }, "Failed to get all products");
+      return [];
+    }
+
+    return data ?? [];
+  }
+
   async getProductById(id: number): Promise<Product | null> {
     const { data, error } = await this.client
       .from("products")
@@ -45,6 +59,32 @@ class SupabaseService {
     }
 
     return data;
+  }
+
+  async updateNhanhId(productId: number, nhanhId: number): Promise<void> {
+    const { error } = await this.client
+      .from("products")
+      .update({ nhanh_id: nhanhId })
+      .eq("id", productId);
+
+    if (error) {
+      logger.error({ error, productId, nhanhId }, "Failed to update nhanh_id");
+    }
+  }
+
+  async deductStock(productId: number, quantity: number): Promise<void> {
+    const product = await this.getProductById(productId);
+    if (!product) return;
+
+    const newQuantity = Math.max(0, product.quantity - quantity);
+    const { error } = await this.client
+      .from("products")
+      .update({ quantity: newQuantity })
+      .eq("id", productId);
+
+    if (error) {
+      logger.error({ error, productId }, "Failed to deduct stock");
+    }
   }
 
   async saveOrder(order: {

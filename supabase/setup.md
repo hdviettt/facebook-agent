@@ -44,11 +44,15 @@ CREATE TABLE orders (
 );
 ```
 
-## 4. Sample test products
+## 4. Add columns for Nhanh.vn sync (run if tables already exist)
 
 ```sql
-INSERT INTO products (name, description, category, price) VALUES
-('Áo thun trắng basic', 'Áo thun cotton 100%, form regular fit, màu trắng', 'Áo thun', 189000),
-('Áo thun đen basic', 'Áo thun cotton 100%, form regular fit, màu đen', 'Áo thun', 189000),
-('Quần jeans slim fit', 'Quần jeans co giãn, form slim fit, màu xanh đậm', 'Quần', 450000);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS nhanh_id BIGINT UNIQUE;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS quantity INT DEFAULT 50;
+```
+
+## 5. Update existing sample products with stock
+
+```sql
+UPDATE products SET quantity = 50 WHERE quantity IS NULL;
 ```

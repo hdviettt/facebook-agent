@@ -1,7 +1,6 @@
 import type OpenAI from "openai";
 
-// Phase 1: Product knowledge tools
-const phase1Tools: OpenAI.ChatCompletionTool[] = [
+export const toolDefinitions: OpenAI.ChatCompletionTool[] = [
   {
     type: "function",
     function: {
@@ -13,8 +12,7 @@ const phase1Tools: OpenAI.ChatCompletionTool[] = [
         properties: {
           query: {
             type: "string",
-            description:
-              "Search query: product name, keyword, or category (e.g., 'ao thun trang', 'giay nike', 'son mac')",
+            description: "Search query: product name, keyword, or category",
           },
           category: {
             type: "string",
@@ -34,7 +32,7 @@ const phase1Tools: OpenAI.ChatCompletionTool[] = [
     function: {
       name: "get_product_details",
       description:
-        "Get detailed information about a specific product by its ID. Use this when the customer asks for more details about a particular product, wants to see attributes (color, size, material), or needs the full description.",
+        "Get detailed information about a specific product by its ID. Use this when the customer asks for more details about a particular product.",
       parameters: {
         type: "object",
         properties: {
@@ -47,22 +45,18 @@ const phase1Tools: OpenAI.ChatCompletionTool[] = [
       },
     },
   },
-];
-
-// Phase 2: Order tools (Nhanh.vn)
-const phase2Tools: OpenAI.ChatCompletionTool[] = [
   {
     type: "function",
     function: {
       name: "check_inventory",
       description:
-        "Check real-time inventory/stock availability for a product. Use this when the customer asks if a product is in stock, available quantity, or before creating an order.",
+        "Check inventory/stock availability for a product. Use this when the customer asks if a product is in stock or available quantity.",
       parameters: {
         type: "object",
         properties: {
           product_id: {
             type: "number",
-            description: "The Nhanh.vn product ID to check inventory for",
+            description: "The product ID to check inventory for",
           },
         },
         required: ["product_id"],
@@ -74,7 +68,7 @@ const phase2Tools: OpenAI.ChatCompletionTool[] = [
     function: {
       name: "create_order",
       description:
-        "Create a new order on the Nhanh.vn system. ONLY use this when the customer has explicitly confirmed they want to place an order AND you have collected all required information: customer name, phone number, delivery address, and the products with quantities. Always confirm the order details with the customer before calling this tool.",
+        "Create a new order. ONLY use this when the customer has explicitly confirmed they want to place an order AND you have collected all required information: customer name, phone number, delivery address, and the products with quantities. Always confirm the order details with the customer before calling this tool.",
       parameters: {
         type: "object",
         properties: {
@@ -100,9 +94,9 @@ const phase2Tools: OpenAI.ChatCompletionTool[] = [
             items: {
               type: "object",
               properties: {
-                nhanh_product_id: {
+                product_id: {
                   type: "number",
-                  description: "Product ID on Nhanh.vn",
+                  description: "Product ID from our catalog",
                 },
                 quantity: {
                   type: "number",
@@ -113,7 +107,7 @@ const phase2Tools: OpenAI.ChatCompletionTool[] = [
                   description: "Unit price of the product",
                 },
               },
-              required: ["nhanh_product_id", "quantity", "price"],
+              required: ["product_id", "quantity", "price"],
             },
           },
           note: {
@@ -126,7 +120,3 @@ const phase2Tools: OpenAI.ChatCompletionTool[] = [
     },
   },
 ];
-
-export function getToolDefinitions(enableOrders: boolean): OpenAI.ChatCompletionTool[] {
-  return enableOrders ? [...phase1Tools, ...phase2Tools] : phase1Tools;
-}

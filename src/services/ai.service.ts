@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { env } from "../config/env.js";
 import { logger } from "../config/logger.js";
-import { getToolDefinitions } from "../tools/definitions.js";
+import { toolDefinitions } from "../tools/definitions.js";
 import { getToolHandler } from "../tools/index.js";
 import type {
   ChatCompletionMessageParam,
@@ -76,8 +76,6 @@ class AIService {
     history: ChatCompletionMessageParam[],
     senderId: string
   ): Promise<string> {
-    const enableOrders = !!env.NHANH_ACCESS_TOKEN;
-    const tools = getToolDefinitions(enableOrders);
     const maxIterations = 10;
 
     // Working copy of messages for this request (includes tool call/result turns)
@@ -93,7 +91,7 @@ class AIService {
         model: env.AI_MODEL,
         max_tokens: 1024,
         messages,
-        tools,
+        tools: toolDefinitions,
       });
 
       const choice = response.choices[0];
