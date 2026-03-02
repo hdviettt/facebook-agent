@@ -16,7 +16,7 @@ router.get("/nhanh/connect", (req, res) => {
     return;
   }
 
-  const returnLink = `${req.protocol}://${req.get("host")}/nhanh/callback`;
+  const returnLink = `https://${req.get("host")}/nhanh/callback`;
   const authUrl =
     `https://nhanh.vn/oauth?version=2.0&appId=${env.NHANH_APP_ID}&returnLink=${encodeURIComponent(returnLink)}`;
 
