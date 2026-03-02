@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:apidocs.nhanh.vn)",
+      "WebFetch(domain:developers.facebook.com)",
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:messengerbot.app)"
+    ]
+  }
+}
