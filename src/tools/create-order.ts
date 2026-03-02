@@ -15,9 +15,10 @@ interface CreateOrderInput {
     price: number;
   }>;
   note?: string;
+  senderId?: string;
 }
 
-export async function createOrder(input: CreateOrderInput & { senderId?: string }) {
+export async function createOrder(input: CreateOrderInput) {
   logger.info(
     { customerName: input.customer_name, productCount: input.products.length },
     "Creating order"
@@ -27,7 +28,7 @@ export async function createOrder(input: CreateOrderInput & { senderId?: string 
 
   const orderData: NhanhOrderRequest = {
     info: {
-      type: 1, // Home delivery
+      type: 1,
       description: input.note,
     },
     channel: {
@@ -53,12 +54,9 @@ export async function createOrder(input: CreateOrderInput & { senderId?: string 
   // Save order to database
   await supabaseService.saveOrder({
     sender_id: input.senderId ?? "unknown",
-    nhanh_order_id: result.orderId,
     app_order_id: appOrderId,
-    tracking_url: result.trackingUrl,
     status: result.success ? "created" : "failed",
     order_data: orderData as unknown as Record<string, unknown>,
-    response_data: result as unknown as Record<string, unknown>,
   });
 
   if (result.success) {
