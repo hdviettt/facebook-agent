@@ -3,6 +3,7 @@ import { env } from "./config/env.js";
 import { logger } from "./config/logger.js";
 import healthRoutes from "./routes/health.routes.js";
 import webhookRoutes from "./routes/webhook.routes.js";
+import nhanhRoutes from "./routes/nhanh.routes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
 // Routes
 app.use(healthRoutes);
 app.use(webhookRoutes);
+app.use(nhanhRoutes);
 
 // Global error handler
 app.use(

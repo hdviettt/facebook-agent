@@ -22,6 +22,7 @@ const envSchema = z.object({
 
   // Nhanh.vn
   NHANH_APP_ID: z.string().default(""),
+  NHANH_SECRET_KEY: z.string().default(""),
   NHANH_BUSINESS_ID: z.string().default(""),
   NHANH_ACCESS_TOKEN: z.string().default(""),
 
