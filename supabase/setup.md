@@ -1,16 +1,18 @@
 # Supabase Setup
 
-Run these queries in **Supabase Dashboard → SQL Editor**, one at a time.
+Run these queries in **Supabase Dashboard > SQL Editor**, one at a time.
 
 ## 1. Products table
 
 ```sql
 CREATE TABLE products (
     id          BIGSERIAL PRIMARY KEY,
+    nhanh_id    BIGINT UNIQUE,
     name        TEXT NOT NULL,
     description TEXT,
     category    VARCHAR(255),
     price       DECIMAL(15,2),
+    quantity    INT DEFAULT 0,
     image_url   TEXT,
     status      VARCHAR(20) DEFAULT 'active',
     created_at  TIMESTAMPTZ DEFAULT NOW()
@@ -44,15 +46,11 @@ CREATE TABLE orders (
 );
 ```
 
-## 4. Add columns for Nhanh.vn sync (run if tables already exist)
+## 4. Sample products (optional)
 
 ```sql
-ALTER TABLE products ADD COLUMN IF NOT EXISTS nhanh_id BIGINT UNIQUE;
-ALTER TABLE products ADD COLUMN IF NOT EXISTS quantity INT DEFAULT 50;
-```
-
-## 5. Update existing sample products with stock
-
-```sql
-UPDATE products SET quantity = 50 WHERE quantity IS NULL;
+INSERT INTO products (name, description, category, price, quantity) VALUES
+('Áo thun trắng basic', 'Áo thun cotton 100%, form regular fit, màu trắng', 'Áo thun', 189000, 50),
+('Áo thun đen basic', 'Áo thun cotton 100%, form regular fit, màu đen', 'Áo thun', 189000, 50),
+('Quần jeans slim fit', 'Quần jeans co giãn, form slim fit, màu xanh đậm', 'Quần', 450000, 50);
 ```
