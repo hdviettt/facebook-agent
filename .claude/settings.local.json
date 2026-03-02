@@ -8,7 +8,10 @@
       "Bash(npm install:*)",
       "Bash(npx tsc:*)",
       "WebFetch(domain:medium.com)",
-      "WebFetch(domain:messengerbot.app)"
+      "WebFetch(domain:messengerbot.app)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "WebFetch(domain:facebook-agent-production.up.railway.app)"
     ]
   }
 }

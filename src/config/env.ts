@@ -12,8 +12,9 @@ const envSchema = z.object({
   FB_VERIFY_TOKEN: z.string().min(1, "FB_VERIFY_TOKEN is required"),
   FB_APP_SECRET: z.string().default(""),
 
-  // Anthropic
-  ANTHROPIC_API_KEY: z.string().default(""),
+  // AI (OpenRouter)
+  OPENROUTER_API_KEY: z.string().default(""),
+  AI_MODEL: z.string().default("anthropic/claude-sonnet-4"),
 
   // Supabase
   SUPABASE_URL: z.string().default("https://placeholder.supabase.co"),
@@ -25,7 +26,6 @@ const envSchema = z.object({
   NHANH_ACCESS_TOKEN: z.string().default(""),
 
   // Optional
-  CLAUDE_MODEL: z.string().default("claude-sonnet-4-20250514"),
   MAX_CONVERSATION_HISTORY: z.coerce.number().default(20),
   LOG_LEVEL: z
     .enum(["debug", "info", "warn", "error"])
