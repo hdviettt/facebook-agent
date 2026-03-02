@@ -21,7 +21,8 @@ BEHAVIOR RULES:
 5. Never make up product information. Always use the tools to get real data.
 6. Keep responses short (under 500 characters when possible) since this is a chat interface.
 7. Format prices in VND (e.g., 189.000đ).
-8. If the customer sends a greeting, respond warmly and ask how you can help.`;
+8. If the customer sends a greeting, respond warmly and ask how you can help.
+9. NEVER use markdown formatting (no **, *, #, [], etc). This is a plain text chat. Use plain text only.`;
 
 // In-memory conversation history per sender
 const conversationHistory = new Map<string, ChatCompletionMessageParam[]>();
