@@ -6,7 +6,7 @@ export const toolDefinitions: OpenAI.ChatCompletionTool[] = [
     function: {
       name: "search_products",
       description:
-        "Search for products by name, category, or keyword. Use this when the customer asks about available products, product recommendations, or searches for specific items.",
+        "Search for products by name, category, or keyword. Returns brief results (name, price, packaging). Use get_product_details for full info including ingredients, recipes, usage instructions, tips, and pricing tiers.",
       parameters: {
         type: "object",
         properties: {
@@ -32,7 +32,7 @@ export const toolDefinitions: OpenAI.ChatCompletionTool[] = [
     function: {
       name: "get_product_details",
       description:
-        "Get detailed information about a specific product by its ID. Use this when the customer asks for more details about a particular product.",
+        "Get detailed information about a specific product by its ID. Returns ingredients, recipes, usage instructions, tips, storage info, shelf life, special notes, and pricing tiers (different sizes/combos). Use when customer asks about a specific product's details, how to use it, what dishes to make, or pricing options.",
       parameters: {
         type: "object",
         properties: {

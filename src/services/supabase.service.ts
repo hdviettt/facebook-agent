@@ -17,11 +17,12 @@ class SupabaseService {
   }
 
   async searchProducts(query: string, limit = 5): Promise<Product[]> {
+    const pattern = `%${query}%`;
     const { data, error } = await this.client
       .from("products")
       .select("*")
       .eq("status", "active")
-      .ilike("name", `%${query}%`)
+      .or(`name.ilike.${pattern},other_name.ilike.${pattern},description.ilike.${pattern}`)
       .limit(limit);
 
     if (error) {
@@ -69,21 +70,6 @@ class SupabaseService {
 
     if (error) {
       logger.error({ error, productId, nhanhId }, "Failed to update nhanh_id");
-    }
-  }
-
-  async deductStock(productId: number, quantity: number): Promise<void> {
-    const product = await this.getProductById(productId);
-    if (!product) return;
-
-    const newQuantity = Math.max(0, product.quantity - quantity);
-    const { error } = await this.client
-      .from("products")
-      .update({ quantity: newQuantity })
-      .eq("id", productId);
-
-    if (error) {
-      logger.error({ error, productId }, "Failed to deduct stock");
     }
   }
 

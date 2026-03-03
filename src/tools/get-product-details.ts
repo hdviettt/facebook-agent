@@ -14,12 +14,25 @@ export async function getProductDetails(input: GetProductDetailsInput) {
     return { error: "Product not found" };
   }
 
+  const attrs = product.attributes ?? {};
+
   return {
     id: product.id,
     name: product.name,
+    other_name: product.other_name,
     description: product.description,
     category: product.category,
+    brand: product.brand,
     price: product.price,
     image_url: product.image_url,
+    ingredients: attrs.ingredients,
+    packaging: attrs.packaging,
+    recipes: attrs.recipes,
+    usage_instructions: attrs.usage_instructions,
+    tips: attrs.tips,
+    storage: attrs.storage,
+    shelf_life: attrs.shelf_life,
+    special_notes: attrs.special_notes,
+    pricing_tiers: attrs.pricing_tiers,
   };
 }

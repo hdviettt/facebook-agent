@@ -35,12 +35,6 @@ export async function createOrder(input: CreateOrderInput) {
     if (!product.nhanh_id) {
       return { success: false, error: `Product "${product.name}" is not synced to Nhanh.vn` };
     }
-    if (product.quantity < item.quantity) {
-      return {
-        success: false,
-        error: `${product.name}: only ${product.quantity} in stock, requested ${item.quantity}`,
-      };
-    }
     nhanhProducts.push({
       id: product.nhanh_id,
       price: item.price,
@@ -80,12 +74,7 @@ export async function createOrder(input: CreateOrderInput) {
     order_data: orderData as unknown as Record<string, unknown>,
   });
 
-  // Deduct stock on success
   if (result.success) {
-    for (const item of input.products) {
-      await supabaseService.deductStock(item.product_id, item.quantity);
-    }
-
     return {
       success: true,
       order_id: result.orderId,

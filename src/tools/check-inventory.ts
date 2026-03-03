@@ -1,4 +1,5 @@
 import { supabaseService } from "../services/supabase.service.js";
+import { nhanhService } from "../services/nhanh.service.js";
 import { logger } from "../config/logger.js";
 
 interface CheckInventoryInput {
@@ -14,10 +15,40 @@ export async function checkInventory(input: CheckInventoryInput) {
     return { error: "Product not found" };
   }
 
-  return {
-    product_id: product.id,
-    product_name: product.name,
-    quantity: product.quantity,
-    in_stock: product.quantity > 0,
-  };
+  if (!product.nhanh_id) {
+    return {
+      error: `Product "${product.name}" is not synced to inventory system`,
+    };
+  }
+
+  try {
+    const nhanhProduct = await nhanhService.getProduct(product.nhanh_id);
+
+    if (!nhanhProduct) {
+      return {
+        product_id: product.id,
+        product_name: product.name,
+        error: "Could not retrieve inventory data from Nhanh.vn",
+      };
+    }
+
+    const available = nhanhProduct.inventory?.available ?? 0;
+
+    return {
+      product_id: product.id,
+      product_name: product.name,
+      available,
+      in_stock: available > 0,
+    };
+  } catch (error: any) {
+    logger.error(
+      { productId: input.product_id, error: error.message },
+      "Failed to check inventory from Nhanh.vn"
+    );
+    return {
+      product_id: product.id,
+      product_name: product.name,
+      error: "Inventory check temporarily unavailable, please try again later",
+    };
+  }
 }

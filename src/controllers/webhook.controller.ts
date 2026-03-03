@@ -79,7 +79,7 @@ async function processMessage(
     try {
       await facebookService.sendTextMessage(
         senderId,
-        "Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau nhé!"
+        "Dạ em xin lỗi, hiện tại hệ thống đang gặp sự cố. Chị/anh thử lại sau giúp em nha!"
       );
     } catch {
       // Ignore send failure for error message

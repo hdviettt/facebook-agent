@@ -25,5 +25,6 @@ export async function searchProducts(input: SearchProductsInput) {
     category: p.category,
     price: p.price,
     description: p.description,
+    packaging: p.attributes?.packaging,
   }));
 }
